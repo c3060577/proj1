@@ -1,31 +1,50 @@
-#include <stdio.h>
-#include <string.h>
-int
-main ()
-{
-  char message[100], ch, jh, enc[100];
-  int i, key;
-  printf ("enter a message to encrypt:\n");
-  scanf (" %[^\n]%", &message);
-  printf ("enter key:\n");
-  scanf ("%d", &key);
-  
-  i=0;
-   while(i<=100)
-    {
-        ch = message[i];
-        jh = ch + key;
-        if (ch > 'z')
-	        {
-	        ch = ch - 'z';
-    	    }
     
-        enc[i] = jh;
-      i = i + 1;
-      jh = 32-key;
-    }
-  printf ("%s\n", message);
-  printf ("%s\n", enc); 
+#include <stdio.h>
 
-  return 0;
+int main()
+{
+   int i, x,key,hold;                //initialiases counter i
+                                //x for switch cases encrypt and decrypt
+                                //Key for rotation cypher 
+   char message[100];           //message to be an array
+//inputs the message
+   printf("\nPlease enter a string:\t");    
+    scanf (" %[^\n]%", &message);
+//inputs the key  
+    printf("\nPlease enter a Key:\t");   
+    scanf ("%d", &key);
+//inputs the message  decide to encrypt or decrypt
+ 
+   printf("Enter \n1 to Encrypt \n2 to decrypt\n");
+   scanf("%d", &x);
+
+
+   switch(x)
+   {
+//encrypt  
+   case 1:
+      for(i = 0; (i < 100 && message[i] != '\0'); i++)  //i counter increments, shifts ascii by key and re-stores message
+        message[i] = message[i] + key; 
+        hold = message[i];
+        if (hold>='[')
+        {
+           hold = hold -26;
+           message[i]=hold;
+        }
+
+      printf("\nEncrypted string: %s\n", message);
+      break;
+      
+//decrypt  
+   case 2:
+      for(i = 0; (i < 100 && message[i] != '\0'); i++)
+        message[i] = message[i] - key; 
+
+      printf("\nDecrypted string: %s\n", message);
+      break;
+
+   default:
+      printf("\nError\n");
+   }
+   return 0;
 }
