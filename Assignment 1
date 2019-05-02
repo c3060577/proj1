@@ -1,15 +1,14 @@
-    
 #include <stdio.h>
 
 int main()
 {
-   int i, x,key,hold;                //initialiases counter i
+   int i, x,key,ch;                //initialiases counter i
                                 //x for switch cases encrypt and decrypt
                                 //Key for rotation cypher 
    char message[100];           //message to be an array
 //inputs the message
    printf("\nPlease enter a string:\t");    
-    scanf (" %[^\n]%", &message);
+    scanf (" %[^\n]s", &message);
 //inputs the key  
     printf("\nPlease enter a Key:\t");   
     scanf ("%d", &key);
@@ -23,24 +22,58 @@ int main()
    {
 //encrypt  
    case 1:
-      for(i = 0; (i < 100 && message[i] != '\0'); i++)  //i counter increments, shifts ascii by key and re-stores message
-        message[i] = message[i] + key; 
-        hold = message[i];
-        if (hold>='[')                                  //shifts letters that exceed Z back to around
-        {
-           hold = hold -26;
-           message[i]=hold;
-        }
-
-      printf("\nEncrypted string: %s\n", message);
+      for(i = 0; message[i] != '\0'; ++i){
+		ch = message[i];
+		
+		if(ch >= 'a' && ch <= 'z'){
+			ch = ch + key;
+			
+			if(ch > 'z'){
+				ch = ch - 'z' + 'a' - 1;
+			}
+			
+			message[i] = ch;
+		}
+		else if(ch >= 'A' && ch <= 'Z'){
+			ch = ch + key;
+			
+			if(ch > 'Z'){
+				ch = ch - 'Z' + 'A' - 1;
+			}
+			
+			message[i] = ch;
+		}
+	}
+	
+	printf("Encrypted message: %s", message);
       break;
       
 //decrypt  
    case 2:
-      for(i = 0; (i < 100 && message[i] != '\0'); i++)
-        message[i] = message[i] - key; 
-
-      printf("\nDecrypted string: %s\n", message);
+     for(i = 0; message[i] != '\0'; ++i){
+		ch = message[i];
+		
+		if(ch >= 'a' && ch <= 'z'){
+			ch = ch - key;
+			
+			if(ch < 'a'){
+				ch = ch + 'z' - 'a' + 1;
+			}
+			
+			message[i] = ch;
+		}
+		else if(ch >= 'A' && ch <= 'Z'){
+			ch = ch - key;
+			
+			if(ch < 'A'){
+				ch = ch + 'Z' - 'A' + 1;
+			}
+			
+			message[i] = ch;
+		}
+	}
+	
+	printf("Encrypted message: %s", message);
       break;
 
    default:
