@@ -1,43 +1,58 @@
+//some closed loop brackets are named in notes for sanity sake
+
 #include <stdio.h>
 
 int main()
 {
-   int i, x,key,ch;                //initialiases counter i
-                                //x for switch cases encrypt and decrypt
-                                //Key for rotation cypher 
-   char message[100];           //message to be an array
+//initializing variables
+    int i,j,k, x,key,ch,co;                
+        //i and j are counters for loops
+        //k is a place holder integer for the decryption of substitution
+        //key is for the rotation cyher
+        //ch and co are for value holders for the array values for calculations 
+        //x for switch cases encrypt and decrypt
+                              
+    char message[100];  
+        //message to be an array
+    char sub[52]= {'K','E','I','J','U','T','V','H','P','S','N','C','F','A','M','W','G','D','Q','Z','X','Y','B','R','O','L','k','e','i','j','u','y','v','h','p','s','n','c','f','a','m','w','g','d','q','z','x','y','b','r','o','l'};
+    char ori[53]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0'};
+        //sub is the key for Substitution cypher includes lower case letters so they could be searched for in case lower case letters are involved in the message
+        //ori includes a duplication of the alphabet so that the lower case letters that are found can be matched easily with the ori array for deecyption ease 
+
 //inputs the message
-   printf("\nPlease enter a string:\t");    
-    scanf (" %[^\n]s", &message);
-//inputs the key  
-    printf("\nPlease enter a Key:\t");   
+    printf("Enter you message in ALLCAPS: \t");    
+    scanf (" %[^\n]s", &message); //[^\n] is used to ignore the spaces in the input as spaces are treated as a return
+
+//input variable x for the following switch cases for encryption or decryption and which type of cypher
+    printf("Rotation Cypher Enter - 1 to Encrypt, 2 to decrypt\nSubstitution cypher - 3 to Encrypt 4 to decrypt\n");
+    scanf("%d", &x);
+
+//input key for rotation cypher   
+    if(x == 1 || x == 2){
+    printf("\nPlease enter a Key:\n");   
     scanf ("%d", &key);
-//inputs the message  decide to encrypt or decrypt
- 
-   printf("Enter \n1 to Encrypt \n2 to decrypt\n");
-   scanf("%d", &x);
+}
 
-
-   switch(x)
+   switch(x) //all cases are increments i to evauluate the message array
    {
-//encrypt  
+//Roration cypher encryption  
    case 1:
-      for(i = 0; message[i] != '\0'; ++i){
+        for(i = 0; message[i] != '\0'; ++i){
 		ch = message[i];
-		
+//only does a conversion between a-z (lower case) or A-Z (uppercase)		
 		if(ch >= 'a' && ch <= 'z'){
 			ch = ch + key;
-			
-			if(ch > 'z'){
+		
+			if(ch > 'z'){       //brings the values that exceed z to return back to a and continue the rotation
 				ch = ch - 'z' + 'a' - 1;
 			}
 			
-			message[i] = ch;
+			message[i] = ch-32;  //the -32 converts the lower case letters to an uppercase 
 		}
 		else if(ch >= 'A' && ch <= 'Z'){
 			ch = ch + key;
 			
-			if(ch > 'Z'){
+			if(ch > 'Z'){       //brings the values that exceed Z to return back to a and continue the rotation
 				ch = ch - 'Z' + 'A' - 1;
 			}
 			
@@ -46,38 +61,88 @@ int main()
 	}
 	
 	printf("Encrypted message: %s", message);
-      break;
+      break;    //ends case 1
       
-//decrypt  
+//Rotation cypher Decryption uses the key and reverses the rotation
    case 2:
      for(i = 0; message[i] != '\0'; ++i){
 		ch = message[i];
 		
 		if(ch >= 'a' && ch <= 'z'){
 			ch = ch - key;
-			
-			if(ch < 'a'){
+			if(ch < 'a'){ //brings the values that are below a to return back to z and continue the rotation
 				ch = ch + 'z' - 'a' + 1;
 			}
-			
-			message[i] = ch;
+			message[i] = ch-32; //the -32 converts the lower case letters to an uppercase 
 		}
+		
 		else if(ch >= 'A' && ch <= 'Z'){
 			ch = ch - key;
 			
-			if(ch < 'A'){
+			if(ch < 'A'){ //brings the values that are below A to return back to Z and continue the rotation
 				ch = ch + 'Z' - 'A' + 1;
 			}
-			
 			message[i] = ch;
 		}
 	}
 	
 	printf("Encrypted message: %s", message);
-      break;
+      break;//ends case 2
 
+//Substitution cypher encryption      
+    case 3:
+       for(i = 0; message[i] != '\0'; ++i){
+           ch = message[i];
+//lower case Substitution
+           if(ch >= 'a' && ch <= 'z'){
+			ch = ch - 'a';
+			    //all lower case letters to be reduced by 'a' to match with their sub[] array index
+			message[i] = sub[ch];
+           }//lower case if bracket
+		        else if(ch >= 'A' && ch <= 'Z'){
+			        ch = ch - 'A';
+			        //all Upper case letters to be reduced by 'A' to match with their sub[] array index
+			        message[i] = sub[ch];
+		        }//elseif close
+		}//for loop clase
+      
+    printf("Encrypted message: %s", message);
+        
+       break; //ends case 3
+
+case 4:
+      for(i = 0; message[i] != '\0'; ++i){
+           ch = message[i];
+//for lower case letters, a search is conducted in the sub[] array u sing j as a counter and returns the value k when found
+           if(ch >= 'a' && ch <= 'z'){
+           for(j = 0;j<=52; ++j){
+               co = sub[j];
+               if(co == ch){
+               k=j;
+               }//close loop for if statement
+           }//nested loop close bracket
+           }//if
+           
+//for Upper case letters, a search is conducted in the sub[] array u sing j as a counter and returns the value k when found
+           else if(ch >= 'A' && ch <= 'Z'){
+               for(j = 0;j<=52; ++j){
+               co = sub[j];
+               if(co == ch){
+               k=j;
+               }//close loop for if statement
+           }//nested loop close bracket
+           }//if
+//messaged decrypted using the index returned as k and used            
+        message[i]=ori[k];
+        }//main for loop close bracket 
+    
+    printf("Encrypted message: %s", message);
+    
+      break;//ends case 4 
    default:
       printf("\nError\n");
-   }
+      
+
+   }//end of switch bracket
    return 0;
 }
