@@ -16,26 +16,26 @@ int main()
         //message to be an array
     char sub[52]= {'K','E','I','J','U','T','V','H','P','S','N','C','F','A','M','W','G','D','Q','Z','X','Y','B','R','O','L','k','e','i','j','u','y','v','h','p','s','n','c','f','a','m','w','g','d','q','z','x','y','b','r','o','l'};
     char ori[53]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0'};
-        //sub is the key for Substitution cypher includes lower case letters so they could be searched for in case lower case letters are involved in the message
-        //ori includes a duplication of the alphabet so that the lower case letters that are found can be matched easily with the ori array for deecyption ease 
+        //sub[] is the key for Substitution cypher includes lower case letters so they could be searched for in case lower case letters are involved in the message
+        //ori[] includes a duplication of the alphabet so that the lower case letters that are found can be matched easily with the ori array for deecyption ease 
 
-//inputs the message
-    printf("Enter you message in ALLCAPS: \t");    
+//Message Input
+    printf("Enter you message in ALLCAPS: \t"); //using \t for aesthetics
     scanf (" %[^\n]s", &message); //[^\n] is used to ignore the spaces in the input as spaces are treated as a return
 
 //input variable x for the following switch cases for encryption or decryption and which type of cypher
-    printf("Rotation Cypher Enter - 1 to Encrypt, 2 to decrypt\nSubstitution cypher - 3 to Encrypt 4 to decrypt\n");
+    printf("Rotation Cypher Enter - 1 Shift to the right, 2 Shift to the left\nSubstitution cypher - 3 to Encrypt 4 to decrypt\n");
     scanf("%d", &x);
 
 //input key for rotation cypher   
     if(x == 1 || x == 2){
-    printf("\nPlease enter a Key:\n");   
+    printf("\nPlease enter the Key (positive integers only):\n");   
     scanf ("%d", &key);
 }
 
-   switch(x) //all cases are increments i to evauluate the message array
+   switch(x) //all cases increments i to evauluate the message array
    {
-//Roration cypher encryption  
+//Rotation cypher encryption  
    case 1:
         for(i = 0; message[i] != '\0'; ++i){
 		ch = message[i];
@@ -111,9 +111,10 @@ int main()
        break; //ends case 3
 
 case 4:
+//decryption uses a search loop to search the message[] to search the sub[] for an equal value and returns the sub[] index
       for(i = 0; message[i] != '\0'; ++i){
            ch = message[i];
-//for lower case letters, a search is conducted in the sub[] array u sing j as a counter and returns the value k when found
+//for lower case letters, a search is conducted in the sub[] array using j as a counter and returns the value k when found
            if(ch >= 'a' && ch <= 'z'){
            for(j = 0;j<=52; ++j){
                co = sub[j];
@@ -132,7 +133,7 @@ case 4:
                }//close loop for if statement
            }//nested loop close bracket
            }//if
-//messaged decrypted using the index returned as k and used            
+//messaged decrypted using the returned index k for the the ori[]
         message[i]=ori[k];
         }//main for loop close bracket 
     
